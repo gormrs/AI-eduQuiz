@@ -7,9 +7,9 @@ function log_response($response) {
     $timestamp = date('Y-m-d H:i:s');
 
     // Prepare the log message
-    $log_message = "[$timestamp] Response: $response\n";
+    $log_message = "[$timestamp] Response: $response";
 
-    // Append the log message to the log file
-    file_put_contents($log_file, $log_message, FILE_APPEND);
+    // Append the log message to the log file along with a newline character
+    file_put_contents($log_file, $log_message . PHP_EOL, FILE_APPEND);
 }
 ?>
