@@ -15,3 +15,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.quiz-question {
+  counter-reset: list-counter;
+  list-style-type: none;
+}
+
+.quiz-question li::before {
+  counter-increment: list-counter;
+  content: counter(list-counter, upper-alpha) ". ";
+}
