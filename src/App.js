@@ -9,6 +9,7 @@ function App() {
   const [summary, setSummary] = useState("");
   const [quiz, setQuiz] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     setText(e.target.value);
@@ -19,12 +20,12 @@ function App() {
     try {
       const response = await axios.post("http://localhost:8000/api.php", { text });
       setSummary(response.data.summary);
-      console.log(response.data.quiz);
       const formattedQuiz = JSON.parse(response.data.quiz);
       setQuiz(formattedQuiz);
+      setErrorMessage("");
     } catch (error) {
       console.error("Error fetching data:", error);
-      console.log(error.response);
+      setErrorMessage("Noe gikk galt. Prøv igjen.");
     } finally {
       setLoading(false);
     }
@@ -40,9 +41,14 @@ function App() {
       </header>
 
       <main className="flex-1 px-4 py-8">
+      {errorMessage && (
+        <div className="mb-4 bg-red-600 p-2 rounded-md text-white">
+          {errorMessage}
+        </div>
+        )}
       <div className="mb-8 bg-gray-900 px-4 py-4 rounded-md">
         <label className="block text-sm font-bold mb-2 text-white">Skriv inn tekst:</label>
-        <textarea className="w-full p-2 mb-4 bg-gray-800 border border-gray-700 text-white" value={text} onChange={handleChange} rows="10" cols="50" />
+        <textarea className="w-full p-2 mb-4 bg-gray-800 border border-gray-700 text-white" value={text} onChange={handleChange} rows="10" cols="50" maxLength="2048"/>
         <button className="bg-blue-600 py-2 px-4 mb-8 relative" onClick={handleSubmit} disabled={loading}>
           {loading ? <FadeLoader size={15} color={"#ffffff"} /> : "Send inn"}
         </button>
@@ -65,8 +71,8 @@ function App() {
         </ol>
         </div>
       </main>
-      <footer className="bg-zinc-900 p-4 flex justify-between items-center">
-        <p>© 2023 AI-eduQuiz. </p>
+      <footer className="bg-zinc-900 p-4 flex flex-col md:flex-row justify-between items-center">
+        <p>© 2023 AI-eduQuiz. <br /> Laget med: PHP, React, TailwindCSS</p>
         <p>Created by Gorm R. Sørbye</p>
       </footer>
     </div>
