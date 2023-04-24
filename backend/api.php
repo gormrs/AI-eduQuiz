@@ -24,7 +24,6 @@ if (isset($data['text'])) {
 
     // Apply additional filtering
     $sanitizedArticle = filter_var($strippedArticle, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_BACKTICK);
-    error_log("Sanitized input: " . $sanitizedArticle);
 } else {
     http_response_code(400);
     echo json_encode(["message" => "Invalid input."]);
