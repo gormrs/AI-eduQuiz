@@ -15,8 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 
-$data = json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"), true);
 $env_path = __DIR__ . '/../.env';
+
+if (isset($data['text'])) {
+    // Remove HTML and PHP tags
+    $strippedArticle = strip_tags($data['text']);
+
+    // Apply additional filtering
+    $sanitizedArticle = filter_var($strippedArticle, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_BACKTICK);
+    error_log("Sanitized input: " . $sanitizedArticle);
+} else {
+    http_response_code(400);
+    echo json_encode(["message" => "Invalid input."]);
+    exit();
+}
 
 if (!file_exists($env_path)) {
     http_response_code(500);
@@ -32,11 +45,6 @@ if (empty($env)) {
     exit();
 }
 
-if (empty($data->text)) {
-    http_response_code(400);
-    echo json_encode(["message" => "Invalid input."]);
-    exit();
-}
 
 if (!function_exists('generate_content')) {
     http_response_code(500);
@@ -46,7 +54,7 @@ if (!function_exists('generate_content')) {
 
 
 $summary_system_message = "Lag et sammendrag av en artikkel på norsk på 1 til 2 paragrafer. Start sammendraget direkte med hovedpoenget uten å bruke formuleringen artikkelen tar for seg.";
-$quiz_system_message = " Lag så en quiz med 4 spørsmål og svaralternativer på dette formatet og bare på dette formatet: 
+$quiz_system_message = " Lag så en quiz med 4 spørsmål og svaralternativer på dette JSON formatet og bare JSON: 
     [
         {
     \"question\": \"Hva er hovedpoenget i artikkelen?\",
@@ -58,8 +66,8 @@ $quiz_system_message = " Lag så en quiz med 4 spørsmål og svaralternativer p�
     ],
     }";
 
-$summary_response = generate_content($summary_system_message, $data->text, $env);
-$quiz_response = generate_content($quiz_system_message, $data->text, $env);
+$summary_response = generate_content($summary_system_message, $sanitizedArticle, $env);
+$quiz_response = generate_content($quiz_system_message, $sanitizedArticle, $env);
 
 $summary_decoded = json_decode($summary_response, true);
 $quiz_decoded = json_decode($quiz_response, true);
