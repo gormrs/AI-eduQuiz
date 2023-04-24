@@ -30,6 +30,13 @@ if (isset($data['text'])) {
     exit();
 }
 
+// Check if the input has too many words
+if (str_word_count($sanitizedArticle) > 4096) {
+    http_response_code(400);
+    echo json_encode(["message" => "Input has too many words. Maximum 2048 words allowed."]);
+    exit();
+}
+
 if (!file_exists($env_path)) {
     http_response_code(500);
     echo json_encode(["message" => "Configuration file not found."]);
