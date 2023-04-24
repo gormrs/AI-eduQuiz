@@ -30,6 +30,12 @@ if (isset($data['text'])) {
     exit();
 }
 
+if (empty($sanitizedArticle)) {
+    http_response_code(400);
+    echo json_encode(["message" => "Input is empty."]);
+    exit();
+}
+
 // Check if the input has too many words
 if (str_word_count($sanitizedArticle) > 4096) {
     http_response_code(400);
