@@ -17,7 +17,7 @@ function InputForm({ text, setText, handleSubmit, loading }) {
         onChange={handleChange}
         rows="10"
         cols="50"
-        maxLength="2048"
+        maxLength="4000"
       />
       <button
         className="bg-blue-600 py-2 px-4 mb-8 relative inline-flex items-center justify-center"
