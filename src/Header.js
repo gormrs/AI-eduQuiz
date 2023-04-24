@@ -1,4 +1,3 @@
-import { FaGithub } from "react-icons/fa";
 
 function Header() {
     return (
