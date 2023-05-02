@@ -28,7 +28,7 @@ AI edu quiz is a web application that leverages the OpenAI API to help students 
 ```OPENAI_KEY= ..... ```
 - Run `npm start` to start the development server
 - goto `http://localhost:3000/` to view the app
-- Run `php -S localhost:8000``in backend folder to start the php server (make sure you have php-curl installed)
+- Run `php -S localhost:8000` in backend folder to start the php server (make sure you have php-curl installed)
 - Now you can use the app
 
 ## Usage
